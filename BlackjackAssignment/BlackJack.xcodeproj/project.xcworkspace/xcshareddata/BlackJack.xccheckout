@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>FAAD4BCE-AEF2-449A-AE68-AC369FDD4E91</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BlackJack</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D68FDA8F7B438361CA194FCD46CE8B7B9CBB00A6</key>
+		<string>https://github.com/RemySB/iOS-projects.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>BlackjackAssignment/BlackJack.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D68FDA8F7B438361CA194FCD46CE8B7B9CBB00A6</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/RemySB/iOS-projects.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D68FDA8F7B438361CA194FCD46CE8B7B9CBB00A6</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D68FDA8F7B438361CA194FCD46CE8B7B9CBB00A6</string>
+			<key>IDESourceControlWCCName</key>
+			<string>iOS-projects</string>
+		</dict>
+	</array>
+</dict>
+</plist>

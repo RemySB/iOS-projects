@@ -93,6 +93,7 @@ class ViewController: UIViewController {
         betButton.enabled=false
         BetField.enabled=false
         betButton.opaque=false
+        Message.text="No game in progress!"
     }
 
     override func didReceiveMemoryWarning() {
@@ -103,10 +104,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var BetField: UITextField!
     @IBOutlet weak var betButton: UIButton!
     @IBOutlet weak var playerCash: UILabel!
+
+    @IBOutlet weak var PlayerPicker: UIPickerView!
+    @IBOutlet weak var playerScroll: UIPickerView!
+    @IBOutlet weak var Message: UILabel!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var dealerBet: UILabel!
-
-
+    @IBOutlet weak var pot: UILabel!
+    @IBOutlet weak var dealerCards: UICollectionView!
     
     
     @IBAction func PlayButtonPressed() {
@@ -131,9 +136,11 @@ class ViewController: UIViewController {
         
         
         
+        dealerCash.text="$"+String(theGame.getDealer().cashRemaining)
         playerCash.text="$"+String(theGame.players[1].cashRemaining) //hardcoded for now, will change when implementing more players
         dealerBet.text="$"+String(theGame.getDealer().curBet)
-        }
+        pot.text="Pot: $"+String(theGame.pot)
+    }
     
     func playGame(){
         nGames++
@@ -146,7 +153,8 @@ class ViewController: UIViewController {
         
         if((theGame.getDealer().sumCards()<22) & (theGame.players[1].sumCards()<22)){
             //prompt user to place a bet:
-            
+            Message.text="Place a bet!"
+            Message.opaque=true
             betAllowedToggle()
             
             while(betButton.enabled){
@@ -158,6 +166,7 @@ class ViewController: UIViewController {
         
         theGame.endGame()
         updateDisplayVals(true)
+        Message.text="Game over!"
     }
     
     
