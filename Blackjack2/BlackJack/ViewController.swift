@@ -8,79 +8,6 @@
 
 import UIKit
 
-
-class Deck{
-    init(){
-        dealt=[]
-    }
-    internal func dealCard()->Int{
-        var theCard=0
-        //generate a random number between 1 and 52
-        for(var i=0;i<dealt.count;++i){
-            if(dealt[i]==theCard){
-                i=0
-                //generate a new random number between 1 and 52
-            }
-        }
-        dealt.append(theCard)
-        return theCard%4
-    }
-    internal func clearDealt(){
-        dealt=[]
-    }
-    var dealt: [Int]
-    
-}
-
-class Player{
-    init(dealer: Bool){
-        isDealer=dealer
-        cashRemaining=100
-        cards=[]
-        curBet=0
-    }
-    
-    
-    
-    func sumCards()->Int{
-        var sum=0
-        var ace=false
-        for card in cards{
-            if(card==1){
-                ace=true
-            }
-            
-            if(card<10){
-                sum+=10
-            }
-            else{
-                sum+=card
-            }
-        }
-        
-        if((sum<=11) & ace){ //if it will not put the player over, count ace as 11
-            sum+=10 //ace already added 1 to sum
-        }
-        
-        return sum
-    }
-    
-    func recieveCard(card:Int){
-        cards.append(card)
-    }
-    func clearCards(){
-        cards=[]
-    }
-    var isDealer:Bool
-    var cashRemaining:Int
-    var curBet: Int
-    var cards: [Int]
-    
-    
-}
-
-
-
 class ViewController: UIViewController {
     
     var theGame: BlackJackGame=BlackJackGame()
@@ -89,11 +16,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        betButton.enabled=false
-        BetField.enabled=false
-        betButton.opaque=false
-        Message.text="No game in progress!"
     }
 
     override func didReceiveMemoryWarning() {
@@ -101,72 +23,76 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBOutlet weak var BetField: UITextField!
+    
+    
+    @IBOutlet weak var betStepper: UIStepper!
     @IBOutlet weak var betButton: UIButton!
     @IBOutlet weak var playerCash: UILabel!
-
-    @IBOutlet weak var PlayerPicker: UIPickerView!
-    @IBOutlet weak var playerScroll: UIPickerView!
-    @IBOutlet weak var Message: UILabel!
-    @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var dealerBet: UILabel!
-    @IBOutlet weak var pot: UILabel!
+    @IBOutlet weak var playerBet: UILabel!
     @IBOutlet weak var dealerCards: UICollectionView!
+    @IBOutlet weak var playerCards: UICollectionView!
+    @IBOutlet weak var drawLabel: UILabel!
+    @IBOutlet weak var drawButtons: UISegmentedControl!
     
     
-    @IBAction func PlayButtonPressed() {
-        playButton.enabled=false
-        playGame()
+    
+    @IBAction func betButtonPressed() {
+        betAllowedToggle()
+        let betAmt = betStepper.value-betStepper.minimumValue
+        theGame.bet(Int(betAmt))
+        betStepper.minimumValue = betStepper.value
+    }
+    
+    func drawAllowedToggle(){
+        drawLabel.hidden = !drawLabel.hidden
+        drawButtons.enabled = !drawButtons.enabled
     }
     
     func betAllowedToggle(){
         betButton.enabled = !betButton.enabled
-        BetField.enabled = !BetField.enabled
-        betButton.opaque = !betButton.opaque
+        betStepper.enabled = !betStepper.enabled
+        betStepper.hidden = !betStepper.hidden
     }
     
-    @IBAction func betButtonPressed() {
-        betAllowedToggle()
-        let betText = BetField.text.toInt()
-        theGame.Bet(betText!)
+    func displayCards(roundOver:Bool){
+        theGame.players[theGame.curPlayerIndx].refreshCardLabels(roundOver)
+        theGame.dealer.refreshCardLabels(roundOver)
+        for(var i=0; i < max(theGame.players[theGame.curPlayerIndx].cardLabels.count, theGame.dealer.cardLabels.count); ++i) {
+            //dealerCards.cellForItemAtIndexPath(NSIndexPath(index: i))?.contentView.insertSubview(theGame.dealer.cardLabels[i],atIndex:0)
+            dealerCards.cellForItemAtIndexPath(NSIndexPath(index: i))?.contentView.bringSubviewToFront(theGame.dealer.cardLabels[i])
+            playerCards.cellForItemAtIndexPath(NSIndexPath(index: i))?.contentView.bringSubviewToFront(theGame.players[theGame.curPlayerIndx].cardLabels[i])
+            
+        }
     }
     
-    func updateDisplayVals(gameOver:Bool){ //gameOver is true when displaying the outcome of the game, false when it's in progress
-        //update cards
-        
-        
-        
-        dealerCash.text="$"+String(theGame.getDealer().cashRemaining)
-        playerCash.text="$"+String(theGame.players[1].cashRemaining) //hardcoded for now, will change when implementing more players
-        dealerBet.text="$"+String(theGame.getDealer().curBet)
-        pot.text="Pot: $"+String(theGame.pot)
+    func updateDisplayVals(roundOver:Bool){ //roundOver is true when displaying the outcome of the round, false when it's in progress
+        displayCards(roundOver)
+        playerCash.text="$"+String(theGame.players[theGame.curPlayerIndx].cashRemaining)
+        dealerBet.text="$"+String(theGame.dealer.curBet)
     }
     
     func playGame(){
+        
+        
         nGames++
         if(nGames==5){
             theGame.deck.clearDealt()
             nGames=0
         }
-        theGame.startGame()
-        updateDisplayVals(false)
         
-        if((theGame.getDealer().sumCards()<22) & (theGame.players[1].sumCards()<22)){
-            //prompt user to place a bet:
-            Message.text="Place a bet!"
-            Message.opaque=true
-            betAllowedToggle()
+        //prompt user to place a bet:
             
+            betAllowedToggle()
             while(betButton.enabled){
                 //wait
             }
             updateDisplayVals(false)
             //maybe draw a card? a few?
-        }
         
-        theGame.endGame()
+        
+        
         updateDisplayVals(true)
-        Message.text="Game over!"
     }
     
     
