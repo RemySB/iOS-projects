@@ -1,0 +1,113 @@
+/* Unfortunately I was not able to get access to a Mac this weekend. My commit from Friday is mostly complete other than the segue and implementation of some game functions.
+I also intended to add a label and button pair which become visible at the end of the round asking the user whether to play another round or exit to the front screen.
+I don't know if there is any way to work on the segue or buttons without using Xcode, but here are the finished gameplay functions. */
+
+//In game.swift, BlackJackGame class:
+
+func startGame(){
+    for player in players{
+        player.recieveCard(deck.dealCard())
+        player.recieveCard(deck.dealCard())
+    }
+	dealer.recieveCard(deck.dealCard())
+	dealer.recieveCard(deck.dealCard())
+}
+
+func winnerIs()->[Int]{ //returns an array of indexes of winning players.
+	var winners:[Int]=[]
+	for(var i=0;(i<players.count);i++){
+		if((players[i].sumCards()<22) & (players[i].sumCards()>dealer.sumCards())){
+			winners.append(i)
+		}
+	}
+	return winners
+}
+
+//this should be added:
+func playerDraw(){
+	players[curPlayerIndx].recieveCard(deck.dealCard())
+	players[curPlayerIndx].refreshCardLabels()
+}
+
+func endRound(){
+	var winners=winnerIs()
+	for (var i=0;i<players.count;++i){
+		if(find(winners,i) != nil){
+			players[i].roundOver(dealer.curBet)
+		}
+		else{
+			players[i].roundOver(0)
+		}
+	}
+	dealer.curBet = 1
+	curPlayerIndx = 0
+}
+
+//func endGame should be removed
+
+//in Player class:
+func refreshCardLabels(roundOver:Bool){
+	for(var i=1;i<7;i++){
+		... //the inside of this loop should not change, was removed for length
+	}
+	if(isDealer){
+		cardLabels[0].text = "Dealer"
+		if(!roundOver){
+			cardLabels[1].text = "?"
+		}
+	}
+	else{
+		cardLabels[0].text = "Player " + toString(theGame.curPlayerIndx + 1)
+	}
+}
+
+//in ViewController.swift, ViewController class:
+
+//these functions should be added:
+
+@IBAction drawYes(){ //touchUpInside for the 'Yes' section of drawButtons
+	theGame.playerDraw()
+	updateDisplayVals(false)
+	if(!theGame.checkForBusts(false)){
+		drawAllowedToggle()
+	}
+}
+@IBAction drawNo(){ //touchUpInside for the 'No' section of drawButtons
+	drawAllowedToggle()
+}
+
+func oneTurn(){
+	//player places a bet:
+	betAllowedToggle()
+	while(betButton.enabled){
+		//wait
+	}
+	updateDisplayVals(false)
+	
+	//player does or does not draw card(s)
+	drawAllowedToggle()
+	while (drawButtons.enabled){
+		//wait
+	}
+}
+
+//playGame() should be:
+func playGame(){
+	nGames++
+	if(nGames==5){
+		theGame.deck.clearDealt()
+		nGames=0
+	}
+	var playRound=true
+	while(playRound){ //playRound is modified by the button which becomes visible at the end of a round
+		for (theGame.curPlayerIndx; theGame.curPlayerIndx < theGame.players.count; ++theGame.curPlayerIndx){ //this increments theGame.curPlayerIndx for everyone
+			oneTurn()
+		}
+		while(theGame.dealerHit()){
+			updateDisplayVals(false)
+		}
+		updateDisplayVals(true)
+		theGame.endRound()
+		playAllowedToggle() //a function to enable the end-of-round buttons
+	}
+}
