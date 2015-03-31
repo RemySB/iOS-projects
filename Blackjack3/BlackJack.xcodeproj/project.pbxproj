@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F3447361ACA0E1E001090E9 /* CardsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3447351ACA0E1E001090E9 /* CardsCollectionViewCell.swift */; };
 		3F43E5201A96B29500E4D63F /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F43E51F1A96B29500E4D63F /* Game.swift */; };
 		3FB1F5611A9D480400055DDA /* FrontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB1F5601A9D480400055DDA /* FrontViewController.swift */; };
 		3FDE6F881AC7567200AE2408 /* CardsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDE6F871AC7567200AE2408 /* CardsCollectionViewController.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F3447351ACA0E1E001090E9 /* CardsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardsCollectionViewCell.swift; sourceTree = "<group>"; };
 		3F43E51F1A96B29500E4D63F /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		3FB1F5601A9D480400055DDA /* FrontViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrontViewController.swift; sourceTree = "<group>"; };
 		3FDE6F871AC7567200AE2408 /* CardsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardsCollectionViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				3FF373DE1A94062000295D0D /* ViewController.swift */,
 				3F43E51F1A96B29500E4D63F /* Game.swift */,
 				3FF373E01A94062000295D0D /* Main.storyboard */,
+				3F3447351ACA0E1E001090E9 /* CardsCollectionViewCell.swift */,
 				3FB1F5601A9D480400055DDA /* FrontViewController.swift */,
 				3FF373E31A94062000295D0D /* Images.xcassets */,
 				3FF373E51A94062000295D0D /* LaunchScreen.xib */,
@@ -223,6 +226,7 @@
 			files = (
 				3FB1F5611A9D480400055DDA /* FrontViewController.swift in Sources */,
 				3FF373DF1A94062000295D0D /* ViewController.swift in Sources */,
+				3F3447361ACA0E1E001090E9 /* CardsCollectionViewCell.swift in Sources */,
 				3F43E5201A96B29500E4D63F /* Game.swift in Sources */,
 				3FF373DD1A94062000295D0D /* AppDelegate.swift in Sources */,
 				3FDE6F881AC7567200AE2408 /* CardsCollectionViewController.swift in Sources */,

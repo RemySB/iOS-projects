@@ -32,19 +32,19 @@ class Shoe{
 }
 
 class Player{
-    init(dealer: Bool,playerNum:Int){
+    init(dealer: Bool){
         isDealer=dealer
         cashRemaining=100
         cardLabels = [UILabel](count:7,repeatedValue:UILabel())
         cards=[Int](count:6,repeatedValue:0)
         nCards=0
         curBet=0
-        if(isDealer){
+        /*if(isDealer){
             cardLabels[0].text="Dealer"
         }
         else{
             cardLabels[0].text="Player " + toString(playerNum)
-        }
+        }*/
     }
     
     
@@ -122,8 +122,10 @@ class Player{
 
 class BlackJackGame{
     init(nPlayers:Int,nDecks:Int){
-        deck=Shoe(nDecks: nDecks)
-        numPlayers=nPlayers
+        deck = Shoe(nDecks: nDecks)
+        numPlayers = nPlayers
+        players = [Player](count: nPlayers, repeatedValue: Player(isDealer: false))
+        
     }
     
     func bet(amt:Int){

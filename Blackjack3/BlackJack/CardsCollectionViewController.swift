@@ -11,7 +11,7 @@ import UIKit
 let reuseIdentifier = "CardCell"
 
 
-class CardsCollectionViewController: UICollectionViewController {
+class CardsCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     var player: Player!
 
@@ -52,15 +52,25 @@ class CardsCollectionViewController: UICollectionViewController {
 
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //#warning Incomplete method implementation -- Return the number of items in the section
-        return 0
+        return player.cards.count
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as UICollectionViewCell
+    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> CardsCollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as CardsCollectionViewCell
     
         // Configure the cell
+        
+        cell.backgroundColor = UIColor.purpleColor()
+        
+        //cell.Label.text = player.cardChars[indexPath.row]
     
         return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView!,
+        layout collectionViewLayout: UICollectionViewLayout!,
+        sizeForItemAtIndexPath indexPath: NSIndexPath!) -> CGSize {
+            return CGSize(width: 39, height: 54)
     }
 
     // MARK: UICollectionViewDelegate

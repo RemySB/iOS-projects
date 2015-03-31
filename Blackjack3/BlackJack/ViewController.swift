@@ -10,8 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var numPlayers = 0
-    var numDecks = 0
+    //var numPlayers = 0
+    //var numDecks = 0
     
     var theGame: BlackJackGame!
     var nGames = 0
@@ -35,6 +35,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var drawLabel: UILabel!
     @IBOutlet weak var drawButtons: UISegmentedControl!
     
+    @IBOutlet weak var okButton: UIButton!
     
     
     @IBAction func betButtonPressed() {
@@ -42,6 +43,10 @@ class ViewController: UIViewController {
         let betAmt = betStepper.value-betStepper.minimumValue
         theGame.bet(Int(betAmt))
         betStepper.minimumValue = betStepper.value
+    }
+    
+    @IBAction func okPressed() {
+        idxIncrement()
     }
     
     func drawAllowedToggle(){
@@ -55,13 +60,17 @@ class ViewController: UIViewController {
         betStepper.hidden = !betStepper.hidden
     }
     
+    func idxIncrement(){
+        theGame.curPlayerIndx = theGame.curPlayerIndx++ % theGame.players.count
+    }
+    
     func displayCards(roundOver:Bool){
-        /*theGame.players[theGame.curPlayerIndx].refreshCardLabels(roundOver)
-        theGame.dealer.refreshCardLabels(roundOver)
-        for(var i=0; i < max(theGame.players[theGame.curPlayerIndx].cardLabels.count, theGame.dealer.cardLabels.count); ++i) {
-            //dealerCards.cellForItemAtIndexPath(NSIndexPath(index: i))?.contentView.insertSubview(theGame.dealer.cardLabels[i],atIndex:0)
-            dealerCards.cellForItemAtIndexPath(NSIndexPath(index: i))?.contentView.bringSubviewToFront(theGame.dealer.cardLabels[i])
-            playerCards.cellForItemAtIndexPath(NSIndexPath(index: i))?.contentView.bringSubviewToFront(theGame.players[theGame.curPlayerIndx].cardLabels[i])
+        /*theGame.players[theGame.curPlayerIndx].refreshCardChars(roundOver)
+        theGame.dealer.refreshCardChars(roundOver)
+        for(var i=0; i < max(theGame.players[theGame.curPlayerIndx].cardChars.count, theGame.dealer.cardChars.count); ++i) {
+            //dealerCards.cellForItemAtIndexPath(NSIndexPath(index: i))?.contentView.insertSubview(theGame.dealer.cardChars[i],atIndex:0)
+            dealerCards.cellForItemAtIndexPath(NSIndexPath(index: i))?.contentView.bringSubviewToFront(theGame.dealer.cardChars[i])
+            playerCards.cellForItemAtIndexPath(NSIndexPath(index: i))?.contentView.bringSubviewToFront(theGame.players[theGame.curPlayerIndx].cardChars[i])
             
         }*/
     }
@@ -74,7 +83,7 @@ class ViewController: UIViewController {
     
     func playGame(){
         
-        
+        /*
         nGames++
         if(nGames==5){
             theGame.deck.clearDealt()
@@ -92,7 +101,7 @@ class ViewController: UIViewController {
         
         
         
-        updateDisplayVals(true)
+        updateDisplayVals(true)*/
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -104,11 +113,6 @@ class ViewController: UIViewController {
         else if segue.identifier == "EmbedDealerCards"{
             if let destinationVC = segue.destinationViewController as? CardsCollectionViewController{
                 destinationVC.player = theGame.dealer
-            }
-        }
-        else if segue.identifier == "EmbedAICards"{
-            if let destinationVC = segue.destinationViewController as? CardsCollectionViewController{
-                destinationVC.player = theGame.AI
             }
         }
     }

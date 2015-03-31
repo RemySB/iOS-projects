@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import UIKit
 
 class Shoe{
     init(nDecks:Int){
@@ -16,12 +15,12 @@ class Shoe{
     }
     func dealCard()->Int{
         var theCard=0
-        //generate a random number between 1 and 52*numDecks
+        theCard = Int(arc4random_uniform(52*UInt32(numDecks)))
         while(find(dealt,theCard) != nil){
-            //regenerate theCard
+            theCard = Int(arc4random_uniform(52*UInt32(numDecks)))
         }
         dealt.append(theCard)
-        return theCard%numDecks%4+1
+        return theCard%numDecks%4 + 1 //number generated is btwn 0 and n-1
     }
     func clearDealt(){
         dealt=[]
@@ -32,22 +31,11 @@ class Shoe{
 }
 
 class Player{
-    init(dealer: Bool,playerNum:Int){
-        isDealer=dealer
-        cashRemaining=100
-        cardLabels = [UILabel](count:7,repeatedValue:UILabel())
-        cards=[Int](count:6,repeatedValue:0)
-        nCards=0
-        curBet=0
-        if(isDealer){
-            cardLabels[0].text="Dealer"
-        }
-        else{
-            cardLabels[0].text="Player " + toString(playerNum)
-        }
+    init(isdealer: Bool, name: String){
+        isDealer = isdealer
+        cashRemaining = 100
+        curBet = 0
     }
-    
-    
     
     func sumCards()->Int{
         var sum=0
@@ -73,49 +61,46 @@ class Player{
     }
     
     func recieveCard(card:Int){
-        cards.insert(card, atIndex: cards.count)
-        nCards++
+        cards.append(card)
+        cardChars.append(cardToChar(card))
+        if(sumCards()>=21){
+            out = true
+        }
     }
     
     func roundOver(winnings:Int){
-        cards=[Int](count:6,repeatedValue:0)
-        curBet=1 //each player automatically antes
+        cards=[Int]()
         cashRemaining+=winnings
+        if(cashRemaining<=0){
+            out=true
+        }
+        curBet=1 //each player automatically antes
+        cashRemaining-=1
     }
     
-    func refreshCardLabels(roundOver:Bool){
-        for(var i=1;i<7;i++){
-            if(cards[i-1]==1){
-                cardLabels[i].text = "A"
-            }
-            else if(cards[i-1]==11){
-                cardLabels[i].text = "J"
-            }
-            else if(cards[i-1]==12){
-                cardLabels[i].text = "Q"
-            }
-            else if(cards[i-1]==13){
-                cardLabels[i].text = "K"
-            }
-            else if(cards[i-1]==0){
-                cardLabels[i].text = ""
-            }
-            else{
-                cardLabels[i].text = toString(cards[i-1])
-            }
+    func cardToChar(card: Int)->String{
+        if(card==1){
+            return "A"
         }
-        if(isDealer){
-            if(!roundOver){
-                cardLabels[1].text = "?"
-            }
+        else if(card==11){
+            return "J"
+        }
+        else if(card==12){
+            return "Q"
+        }
+        else if(card==13){
+            return "K"
+        }
+        else{
+            return toString(card)
         }
     }
     var isDealer:Bool
-    var cardLabels:[UILabel]
+    var cardChars = [String]()
     var cashRemaining:Int
     var curBet: Int
-    var cards: [Int]
-    var nCards:Int
+    var cards = [Int]()
+    var out = false
     
     
 }
@@ -123,7 +108,22 @@ class Player{
 class BlackJackGame{
     init(nPlayers:Int,nDecks:Int){
         deck=Shoe(nDecks: nDecks)
-        numPlayers=nPlayers
+        players.append(Player(isdealer: false, name: "AI player"))
+        for(var i=1;i<=nPlayers;i++){
+            players.append(Player(isdealer: false, name: ("Player " + toString(i))))
+        }
+        initialDeal()
+    }
+    
+    func initialDeal(){
+        dealer.recieveCard(deck.dealCard())
+        dealer.recieveCard(deck.dealCard())
+        dealer.cardChars[0] = "?"
+        
+        for player in players{
+            player.recieveCard(deck.dealCard())
+            player.recieveCard(deck.dealCard())
+        }
     }
     
     func bet(amt:Int){
@@ -139,6 +139,7 @@ class BlackJackGame{
         else{
             dealer.curBet=3
         }
+        
     }
     
     func dealerHit()->Bool{
@@ -149,23 +150,9 @@ class BlackJackGame{
         return false
     }
     
-    func checkForBusts(checkDealer:Bool)->Bool{
-        return(checkDealer ? dealer.sumCards()>21 : players[curPlayerIndx].sumCards()>21)
-    }
-    
-    func removePlayer(){//removes the current player
-        players.removeAtIndex(curPlayerIndx)
-    }
-    
-    func startGame(){
-        for player in players{
-            player.recieveCard(deck.dealCard())
-            player.recieveCard(deck.dealCard())
-        }
-    }
     
     func winnerIs()->[Int]{ //returns an array of indexes of winning players.
-        var winners:[Int]=[];
+        var winners:[Int]=[]
         for(var i=0;(i<players.count);i++){
             if((players[i].sumCards()<22) & (players[i].sumCards()>dealer.sumCards())){
                 
@@ -174,17 +161,9 @@ class BlackJackGame{
         return winners
     }
     
-    func endGame(){
-        if(dealer.sumCards()<22){
-            
-        }
-    }
-    
-    var players: [Player]=[]
-    var numPlayers:Int
+    var players = [Player]()
     var deck:Shoe
-    var dealer=Player(dealer: true,playerNum: 0)
-    var AI=Player(dealer: false,playerNum: 0)
+    var dealer=Player(isdealer: true, name: "Dealer")
     var curPlayerIndx=0
     
     
